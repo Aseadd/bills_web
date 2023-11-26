@@ -55,7 +55,7 @@ const Reminder = () => {
 
     const daysUntilDue: number = Math.floor((billDate.getTime() - currentDate.getTime()) / millisecondsInADay);
 
-    return daysUntilDue > 0 && daysUntilDue <= 3;
+    return daysUntilDue > 0 && daysUntilDue <= 2;
   });
 
   return (

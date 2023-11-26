@@ -12,6 +12,7 @@ import Bills from './components/Bills';
 import Logout from './components/Logout';
 import CreateBill from './components/CreateBill';
 import Reminder from './components/Reminder';
+import Payments from './components/Payments';
 
 import Cookies from 'js-cookie';
 
@@ -44,6 +45,11 @@ const App: React.FC = () => {
           <Route
             path="/reminder"
             element={isAuthenticated() ? <Reminder /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/payment"
+            element={isAuthenticated() ? <Payments /> : <Navigate to="/login" />}
           />
          
         </Routes> 

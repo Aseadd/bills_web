@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import BillDetail from './BillDetail'; 
 import CreateBill from './CreateBill';
 import Reminder from './Reminder';
+import { red } from '@mui/material/colors';
 
 interface Bill {
   id: number;
@@ -82,7 +83,7 @@ const Bills: React.FC = () => {
 
   return (
     <Paper elevation={3} style={{ padding: 16, margin: 16 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom style={{color: 'red'}}>
         Your Bills
       </Typography>
       {loading ? (
@@ -90,15 +91,13 @@ const Bills: React.FC = () => {
       ) : (
      
         <div>
-            <Button variant="contained" color="primary" onClick={() => handleCreateBill}>
-              Create Bill
-            </Button>
           <List>
             {bills.map((bill) => (
-              <ListItem key={bill.id}>
+              <ListItem key={bill.id}  style={{ borderRadius: '10px'}}>
                 <ListItemText
                   primary={<strong>{bill.bill_name}</strong>}
                   secondary={`$${bill.bill_amount} - ${bill.bill_date} - ${bill.status} - ${bill.id}`}
+                 
                 />
                 <Button onClick={() => handleDetails(bill.id)}>Details</Button>
                 <Button onClick={() => handleDelete(bill.id)}>Delete</Button>
