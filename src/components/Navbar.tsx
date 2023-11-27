@@ -91,6 +91,19 @@ const menuItems = [
       { label: 'Reminder', to: '/reminder' },
       { label: 'Report', to: '/report' },
     ];
+    const menuItemsA = [
+      { label: 'Bills', to: '/bills' },
+      { label: 'Add Bill', to: '/create-bill' },
+      { label: 'Payment', to: '/payment' },
+      { label: 'Reminder', to: '/reminder' },
+      { label: 'Report', to: '/report' },
+    ];
+    const menuItemsC = [
+      { label: 'Bills', to: '/bills' },
+      { label: 'Payment', to: '/payment' },
+      { label: 'Reminder', to: '/reminder' },
+      { label: 'Report', to: '/report' },
+    ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
@@ -98,6 +111,9 @@ function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+
+  const userType = localStorage.getItem('user_type');
+  const roles: any[] = ['A', 'B', 'C'];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -209,16 +225,30 @@ const logout = () => {
               textDecoration: 'none',
             }}
           >
-            L
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {menuItems.map((page) => (
+            {userType === "B" &&  menuItems.map((page: any) => (
+                  <NavLink
+                    className={currentIndex === page.label ? "px-4 cursor-pointer text-red-400" : "px-4 cursor-pointer"}
+                    to={page.to}
+                    onClick= {() => setCurrentIndex(page.label)}
+                    >
+                  <Button
+                    key={page.label}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block', fontWeight: 700, letterSpacing: '.3rem', textDecoration: 'none' }}
+                  >
+                    {page.label}
+                  </Button>
+                  </NavLink>
+            ))}
+
+          {userType === "C" &&  menuItemsC.map((page: any) => ( 
               <NavLink
                 className={currentIndex === page.label ? "px-4 cursor-pointer text-red-400" : "px-4 cursor-pointer"}
                 to={page.to}
                 onClick= {() => setCurrentIndex(page.label)}
                 >
-
               <Button
                 key={page.label}
                 onClick={handleCloseNavMenu}
@@ -227,7 +257,23 @@ const logout = () => {
                 {page.label}
               </Button>
               </NavLink>
-            ))}
+        ))}
+
+        {userType === "A" &&  menuItemsA.map((page: any) => ( 
+              <NavLink
+                className={currentIndex === page.label ? "px-4 cursor-pointer text-red-400" : "px-4 cursor-pointer"}
+                to={page.to}
+                onClick= {() => setCurrentIndex(page.label)}
+                >
+              <Button
+                key={page.label}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block', fontWeight: 700, letterSpacing: '.3rem', textDecoration: 'none' }}
+              >
+                {page.label}
+              </Button>
+              </NavLink>
+          ))}
           </Box>
           
 

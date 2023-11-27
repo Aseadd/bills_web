@@ -14,15 +14,22 @@ const Login = () => {
     const user = {
       email: email,
       password: password,
+
     };
     try {
       const { data } = await axios.post('http://localhost:8000/token/', user);
+      const response = await axios.get('http://localhost:8000/users/');
+
+      const matchingUser = response.data.find((user: any) => user.email === email);
+      const user_type = matchingUser.user_type;
+      console.log('matchingUser', user_type);
+      Cookies.set('user_type', user_type);
 
       Cookies.set('access_token', data.access);
       Cookies.set('refresh_token', data.refresh);
       Cookies.set('email', email);
       Cookies.set("id", "1");
-      storeTokenLocally(data.access);
+      storeTokenLocally(data.access, user_type);
       navigate('/bills');
     } catch (error: any) {
       console.error('Error in token fetch:', error.message);
@@ -73,6 +80,7 @@ const Login = () => {
 export default Login;
 
 
-const storeTokenLocally = (accessToken: string) => {
+const storeTokenLocally = (accessToken: string, user_type: string) => {
   localStorage.setItem('access_token', accessToken);
+  localStorage.setItem('user_type', user_type)
 };
