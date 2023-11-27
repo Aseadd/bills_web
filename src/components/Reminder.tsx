@@ -62,15 +62,15 @@ const Reminder = () => {
     <Card variant="outlined" style={{ marginTop: 20, borderRadius: 10 }}>
       <CardContent>
       {overdueBills.length > 0 && (
-          <div>
-            <Typography variant="h6" gutterBottom>
-              Overdue Bills Reminder
-            </Typography>
+      <div>
+      <Typography variant="h5" gutterBottom style={{color: '#1b5e20'}}>
+        Overdue Bills Reminder
+      </Typography>
             <List>
               {overdueBills.map((bill: any) => (
                 <ListItem key={bill.id} style={{ marginBottom: 10 }}>
                   <Typography>
-                    <strong>{bill.bill_name}</strong> - {bill.bill_date}
+                    <strong>{bill.bill_name}</strong> - {bill.bill_date} -  <span>Birr </span>{bill.bill_amount}
                   </Typography>
                 </ListItem>
               ))}
@@ -80,14 +80,14 @@ const Reminder = () => {
         
         {upcomingBills.length > 0 && (
           <div style={{ marginBottom: 20 }}>
-            <Typography variant="h6" gutterBottom>
-              Upcoming Bills Reminder
-            </Typography>
+        <Typography variant="h5" gutterBottom style={{color: '#1b5e20'}}>
+        Upcoming Bills Reminder
+      </Typography>
             <List>
               {upcomingBills.map((bill: any) => (
                 <ListItem key={bill.id} style={{ marginBottom: 10 }}>
                   <Typography>
-                    <strong>{bill.bill_name}</strong> - {bill.bill_date}
+                    <strong>{bill.bill_name}</strong> - {bill.bill_date} - <span>Birr </span>{bill.bill_amount}
                   </Typography>
                 </ListItem>
               ))}

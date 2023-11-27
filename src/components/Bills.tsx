@@ -48,7 +48,8 @@ const Bills: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:8000/bills/${id}`);
+     const response = await axios.delete(`http://localhost:8000/bills/${id}`);
+      console.log(response);
       setBills((prevBills) => prevBills.filter((bill) => bill.id !== id));
     } catch (error) {
       console.error('Error deleting bill:', error);
@@ -83,7 +84,7 @@ const Bills: React.FC = () => {
 
   return (
     <Paper elevation={3} style={{ padding: 16, margin: 16 }}>
-      <Typography variant="h4" gutterBottom style={{color: 'red'}}>
+      <Typography variant="h4" gutterBottom style={{color: '#1b5e20'}}>
         Your Bills
       </Typography>
       {loading ? (
@@ -96,7 +97,7 @@ const Bills: React.FC = () => {
               <ListItem key={bill.id}  style={{ borderRadius: '10px'}}>
                 <ListItemText
                   primary={<strong>{bill.bill_name}</strong>}
-                  secondary={`$${bill.bill_amount} - ${bill.bill_date} - ${bill.status} - ${bill.id}`}
+                  secondary={`Birr-${bill.bill_amount} - ${bill.bill_date} - ${bill.status} `}
                  
                 />
                 <Button onClick={() => handleDetails(bill.id)}>Details</Button>

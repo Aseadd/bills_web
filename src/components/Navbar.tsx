@@ -86,7 +86,7 @@ import { NavLink } from 'react-router-dom';
 
 const menuItems = [
       { label: 'Bills', to: '/bills' },
-      { label: 'Bill', to: '/create-bill' },
+      { label: 'Add Bill', to: '/create-bill' },
       { label: 'Payment', to: '/payment' },
       { label: 'Reminder', to: '/reminder' },
       { label: 'Report', to: '/report' },
@@ -128,7 +128,7 @@ const logout = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/bills"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },

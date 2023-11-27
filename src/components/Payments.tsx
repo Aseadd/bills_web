@@ -43,8 +43,8 @@ const Payments: React.FC = () => {
   }, []); 
   return (
     <Paper elevation={3} style={{ padding: 16, margin: 16 }}>
-      <Typography variant="h4" gutterBottom>
-        Your Payments 
+       <Typography variant="h4" gutterBottom style={{color: '#1b5e20'}}>
+        Your Payments
       </Typography>
       {loading ? (
         <CircularProgress />
@@ -56,7 +56,7 @@ const Payments: React.FC = () => {
               <ListItem key={product.id}>
                 <ListItemText
                   primary={<strong>{product.name}</strong>}
-                  secondary={`${product.description} - $${product.price}`}
+                  secondary={`${product.description} - Birr&nbsp;${product.price}`}
                 />
               </ListItem>
             ))}
