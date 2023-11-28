@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CircularProgress, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
+import {
+  CircularProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
 import Cookies from 'js-cookie';
-import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import BillDetail from './BillDetail'; 
-import CreateBill from './CreateBill';
-import Reminder from './Reminder';
-import { red } from '@mui/material/colors';
+import BillDetail from './BillDetail';
 
 interface Bill {
   id: number;
@@ -22,6 +34,8 @@ const Bills: React.FC = () => {
   const [bills, setBills] = useState<Bill[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,92 +58,119 @@ const Bills: React.FC = () => {
     };
 
     fetchBills();
-  }, []); 
+  }, []);
 
-  const handleDelete = async (id: number) => {
-    try {
-     const response = await axios.delete(`http://localhost:8000/bills/${id}`);
-      console.log(response);
-      setBills((prevBills) => prevBills.filter((bill) => bill.id !== id));
-    } catch (error) {
-      console.error('Error deleting bill:', error);
+  const handleDelete = (id: number) => {
+    setDeleteId(id);
+    setOpenDialog(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteId !== null) {
+      try {
+        const response = await axios.delete(`http://localhost:8000/bills/${deleteId}`);
+        console.log(response);
+        setBills((prevBills) => prevBills.filter((bill) => bill.id !== deleteId));
+      } catch (error) {
+        console.error('Error deleting bill:', error);
+      } finally {
+        setOpenDialog(false);
+      }
     }
   };
 
+  const handleCancelDelete = () => {
+    setOpenDialog(false);
+    setDeleteId(null);
+  };
+
   const handleDetails = async (bill: any) => {
-   console.log('handleDetails', bill);
-    // try {
-    //   const response = await axios.get(`http://localhost:8000/bills/${id}`);
-    //   setSelectedBill(response.data);
-    //   console.log(response.data);
-    // } catch (error) {
-    //   console.error('Error fetching bill details:', error);
-    // }
     setSelectedBill(bills.find((b) => b.id === bill) || null);
   };
 
   const handleCreateBill = async () => {
-   
-  }
+    // Implement your logic for creating a new bill
+    // You may navigate to the create bill page or show a dialog
+  };
 
   const upcomingBills = bills.filter((bill) => {
     const currentDate: Date = new Date();
     const billDate: Date = new Date(bill.bill_date);
     const millisecondsInADay: number = 1000 * 60 * 60 * 24;
-    
+
     const daysUntilDue: number = Math.floor((billDate.getTime() - currentDate.getTime()) / millisecondsInADay);
-    
+
     return daysUntilDue > 0 && daysUntilDue <= 30;
   });
 
   return (
     <Paper elevation={3} style={{ padding: 16, margin: 16 }}>
-      <Typography variant="h4" gutterBottom style={{color: '#1b5e20'}}>
+      <Typography variant="h4" gutterBottom style={{ color: '#1b5e20' }}>
         Your Bills
       </Typography>
       {loading ? (
         <CircularProgress />
       ) : (
-     
-        <div>
-          <List>
-            {bills.map((bill) => (
-              <ListItem key={bill.id}  style={{ borderRadius: '10px'}}>
-                <ListItemText
-                  primary={<strong>{bill.bill_name}</strong>}
-                  secondary={`Birr-${bill.bill_amount} - ${bill.bill_date} - ${bill.status} `}
-                 
-                />
-                <Button onClick={() => handleDetails(bill.id)}>Details</Button>
-                <Button onClick={() => handleDelete(bill.id)}>Delete</Button>
-              </ListItem>
-            ))}
-          </List>
-          {/* {selectedBill && (
-            <div>
-              <Typography variant="h6">Bill Details</Typography>
-              <p>
-                selectedBill.bill_name
-              </p>
-              <p>
-                selectedBill.bill_amount
-              </p>
+        <>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Bill Name</TableCell>
+                  <TableCell>Bill Amount</TableCell>
+                  <TableCell>Bill Date</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Biller Name</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {bills.map((bill) => (
+                  <TableRow key={bill.id}>
+                    <TableCell>{bill.bill_name}</TableCell>
+                    <TableCell>{`Birr-${bill.bill_amount}`}</TableCell>
+                    <TableCell>{bill.bill_date}</TableCell>
+                    <TableCell>{bill.status}</TableCell>
+                    <TableCell>{bill.biller_name}</TableCell>
+                    <TableCell>
+                      <Button onClick={() => handleDetails(bill.id)}>Details</Button>
+                      <Button onClick={() => handleDelete(bill.id)} color='error'>Delete</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-            </div>
-          )} */}
-          {selectedBill && <BillDetail bill={selectedBill} />}
-        </div>
+          {/* Confirmation Dialog */}
+          <Dialog open={openDialog} onClose={handleCancelDelete}>
+            <DialogTitle>Confirm Delete</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Are you sure you want to delete this bill?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCancelDelete}>Cancel</Button>
+              <Button onClick={handleConfirmDelete} color="error">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+          {selectedBill && <BillDetail bill = {selectedBill} />}
+        </>
       )}
     </Paper>
-  );
+
+);
 };
 
 export default Bills;
 
 const retrieveTokenLocally = () => {
-  const token = Cookies.get('access_token');
-  if (!token) {
-    throw new Error('No token found');
-  }
-  return token;
+const token = Cookies.get('access_token');
+if (!token) {
+  throw new Error('No token found');
+}
+return token;
 };

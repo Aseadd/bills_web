@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Button, Paper, TextField, Typography, Grid, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,12 +13,19 @@ const CreateBill = () => {
   const [billData, setBillData] = useState({
     bill_name: '',
     bill_amount: 0,
-    bill_date: new Date().toISOString().split('T')[0], // Format the date as 'YYYY-MM-DD'
+    bill_date: new Date().toISOString().split('T')[0],
     status: 'pending',
-    biller_name: '',
-    // user: null, // Use null initially
+    biller_name: localStorage.getItem('user_name'),
+
   });
-  const toast: React.MutableRefObject<any> = useRef(null);
+
+  const [validationErrors, setValidationErrors] = useState({
+    bill_name: '',
+    bill_amount: '',
+    bill_date: '',
+    status: '',
+  });
+
 
   const [msg, setMsg] = useState('');
   const [success, setSuccess] = useState(false);
@@ -47,31 +56,71 @@ const CreateBill = () => {
     };
 
     fetchUserData();
-  }, []); // Run once when the component mounts
+  }, []); 
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
+
+
+    let error = '';
+    if (name === 'bill_name' && value.length < 3) {
+      error = 'Bill name must be at least 3 characters long.';
+    } else if (name === 'bill_amount' && value < 0) {
+      error = 'Bill amount must be a positive number.';
+    } else if (name === 'bill_date' && value === '') {
+      error = 'Bill date is required.';
+    } else if (name === 'status' && value === '') {
+      error = 'Status is required.';
+    }
+
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+
     setBillData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
+
+  const showToast = (type: 'success' | 'error', message: string) => {
+    if (type === 'success') {
+      toast.success(message, { position: 'top-right', autoClose: 5000 });
+    } else if (type === 'error') {
+      toast.error(message, { position: 'top-right', autoClose: 5000 });
+    }
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    if (Object.values(validationErrors).some((error) => error !== '')) {
+      
+      setMsg('Please fix all validation errors.');
+      setSuccess(false);
+      showToast('error', 'Please fix all validation errors.');
+      return;
+    }
+
     try {
      const response =  await axios.post('http://localhost:8000/bills/create/', billData);
-      if(response.status === 200){
-        setSuccess(true);
-        setMsg('Bill created successfully!');
-        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Bill created successfully!', life: 500 });
-        navigate('/bills');
-      }
-
-    } catch (error) {
-      console.error('Error creating bill:', error);
+     if (response.status === 200) {
+      setMsg('User created successfully!');
+      setSuccess(true);
+      showToast('success', 'Bill created successfully!');
+      // navigate('/users');
+    } else {
+      setMsg('Error creating Bill. Please try again.');
+      setSuccess(false);
+      showToast('error', 'Error creating user. Please try again.');
     }
+  } catch (error) {
+    setMsg('Error creating Bill. Please try again.');
+    setSuccess(false);
+    showToast('error', 'Error creating Bill. Please try again.');
+  }
   };
 
   return (
@@ -88,6 +137,8 @@ const CreateBill = () => {
               fullWidth
               value={billData.bill_name}
               onChange={handleChange}
+              error={Boolean(validationErrors.bill_name)}
+              helperText={validationErrors.bill_name}
             />
           </Grid>
           <Grid item xs={6}>
@@ -98,6 +149,8 @@ const CreateBill = () => {
               type="number"
               value={billData.bill_amount}
               onChange={handleChange}
+              error={Boolean(validationErrors.bill_amount)}
+              helperText={validationErrors.bill_amount}
             />
           </Grid>
           <Grid item xs={6}>
@@ -108,17 +161,10 @@ const CreateBill = () => {
               type="date"
               value={billData.bill_date}
               onChange={handleChange}
+             error= {Boolean(validationErrors.bill_date)}
+              helperText={validationErrors.bill_date}
             />
           </Grid>
-          {/* <Grid item xs={6}>
-            <TextField
-              label="Status"
-              name="status"
-              fullWidth
-              value={billData.status}
-              onChange={handleChange}
-            />
-          </Grid> */}
           <Grid item xs={6}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
@@ -134,20 +180,11 @@ const CreateBill = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Biller Name"
-              name="biller_name"
-              fullWidth
-              value={billData.biller_name}
-              onChange={handleChange}
-            />
-          </Grid>
           <Grid item xs={12}>
             <Button type="submit" variant="contained" color="primary">
               Create Bill
             </Button>
-            {success && <Typography variant="h6">{msg}</Typography>}
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
           </Grid>
         </Grid>
       </form>

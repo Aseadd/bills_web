@@ -105,6 +105,7 @@ const Signup = () => {
     name: '',
     email: '',
     password: '',
+    user_type: 'C',
   });
 
   const handleChange = (e: any) => {

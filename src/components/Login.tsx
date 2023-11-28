@@ -22,6 +22,7 @@ const Login = () => {
 
       const matchingUser = response.data.find((user: any) => user.email === email);
       const user_type = matchingUser.user_type;
+      const user_name = matchingUser.name;
       console.log('matchingUser', user_type);
       Cookies.set('user_type', user_type);
 
@@ -29,7 +30,17 @@ const Login = () => {
       Cookies.set('refresh_token', data.refresh);
       Cookies.set('email', email);
       Cookies.set("id", "1");
-      storeTokenLocally(data.access, user_type);
+      storeTokenLocally(data.access, user_type, user_name);
+      if (user_type === 'C') {
+        navigate('/bills');
+      }
+      else if (user_type === 'B') {
+        navigate('/bills');
+      }
+      else if (user_type === 'A') {
+        navigate('/users');
+      }
+      else
       navigate('/bills');
     } catch (error: any) {
       console.error('Error in token fetch:', error.message);
@@ -80,7 +91,8 @@ const Login = () => {
 export default Login;
 
 
-const storeTokenLocally = (accessToken: string, user_type: string) => {
+const storeTokenLocally = (accessToken: string, user_type: string, user_name: string) => {
   localStorage.setItem('access_token', accessToken);
   localStorage.setItem('user_type', user_type)
+  localStorage.setItem('user_name',user_name )
 };

@@ -1,69 +1,3 @@
-// import React from 'react';
-// import { Navigate } from 'react-router-dom';
-// import Cookies from 'js-cookie';
-// import { useNavigate } from 'react-router-dom';
-// import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
-// import MenuIcon from '@mui/icons-material/Menu';
-// import { NavLink } from 'react-router-dom';
-// import Logout from './Logout';
-
-// const Navbar = () => {
-//   const [anchorEl, setAnchorEl] = React.useState(null);
-//   const navigate = useNavigate();
-
-//   const handleMenuClick = (event: any) => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handleMenuClose = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const menuItems = [
-//     { label: 'Bills', to: '/bills' },
-//     { label: 'Bill', to: '/create-bill' },
-//     { label: 'Payment', to: '/payment' },
-//     { label: 'Reminder', to: '/reminder' },
-//     { label: 'Report', to: '/report' },
-//   ];
-
-//   const logout = () => {
-//     Cookies.remove('access_token');
-//     Cookies.remove('refresh_token');
-//     navigate('/login');
-
-//   };
-
-//   return (
-//     <AppBar position="static">
-//       <Toolbar>
-//         <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleMenuClick}>
-//           <MenuIcon />
-//         </IconButton>
-//         <Menu
-//           anchorEl={anchorEl}
-//           open={Boolean(anchorEl)}
-//           onClose={handleMenuClose}
-//         >
-//           {menuItems.map((item, index) => (
-//             <MenuItem key={index} onClick={handleMenuClose}>
-//               <NavLink to={item.to} style={{ textDecoration: 'none', color: 'inherit' }}>
-//                 {item.label}
-//               </NavLink>
-//             </MenuItem>
-//           ))}
-//         </Menu>
-//         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-//           Bill Management Systems
-//         </Typography>
-//         <MenuItem onClick={logout}>Logout</MenuItem>
-//       </Toolbar>
-//     </AppBar>
-//   );
-// };
-
-// export default Navbar;
-
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -92,11 +26,8 @@ const menuItems = [
       { label: 'Report', to: '/report' },
     ];
     const menuItemsA = [
-      { label: 'Bills', to: '/bills' },
-      { label: 'Add Bill', to: '/create-bill' },
-      { label: 'Payment', to: '/payment' },
-      { label: 'Reminder', to: '/reminder' },
-      { label: 'Report', to: '/report' },
+      { label: 'Users', to: '/users' },
+      { label: 'Add Users', to: '/create-user' },
     ];
     const menuItemsC = [
       { label: 'Bills', to: '/bills' },
@@ -155,7 +86,7 @@ const logout = () => {
               textDecoration: 'none',
             }}
           >
-            Bills System
+           Bills Management
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

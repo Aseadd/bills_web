@@ -10,13 +10,15 @@ const Logout = () => {
       // Clear cookies
       Cookies.remove('access_token');
       Cookies.remove('refresh_token');
-
-      // Redirect to the desired location
+      localStorage.removeItem('user_type');
+      localStorage.removeItem('user_name');
       navigate('/');
     };
 
     logout();
   }, [navigate]);
+
+  // add a spnner 
 
   return null; // or you can render a loading spinner or a message if needed
 };
