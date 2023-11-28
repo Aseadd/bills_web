@@ -91,6 +91,13 @@ const CreateUser = () => {
         setMsg('User created successfully!');
         setSuccess(true);
         showToast('success', 'User created successfully!');
+        setUserData({
+            name: '',
+            email: '',
+            password: '',
+            user_type: '',
+          });
+          
         // navigate('/users');
       } 
       else if (response.status === 400) {

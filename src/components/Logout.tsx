@@ -12,13 +12,15 @@ const Logout = () => {
       Cookies.remove('refresh_token');
       localStorage.removeItem('user_type');
       localStorage.removeItem('user_name');
-      navigate('/');
+      // navigate('/');
+      window.location.href = '/';
+      // window.location.href = window.location.href;
     };
 
     logout();
   }, [navigate]);
 
-  return null;
+  return null; // or you can render a loading spinner or a message if needed
 };
 
 export default Logout;

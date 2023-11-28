@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Paper, TextField, Typography, Grid } from '@mui/material';
+import { Button, Paper, TextField, Typography, Grid, Container } from '@mui/material';
 import axios from 'axios';
 
 const Signup = () => {
@@ -32,6 +32,7 @@ const Signup = () => {
   };
 
   return (
+    <Container component="main" maxWidth="xs">
     <Paper elevation={3} style={{ padding: 16, margin: 16 }}>
       <Typography variant="h4" gutterBottom>
         Signup
@@ -78,6 +79,7 @@ const Signup = () => {
       Already have an account? <a href="/login">Login</a>
      </Typography>
     </Paper>
+  </Container>
   );
 };
 

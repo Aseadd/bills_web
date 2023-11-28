@@ -110,6 +110,13 @@ const CreateBill = () => {
       setMsg('User created successfully!');
       setSuccess(true);
       showToast('success', 'Bill created successfully!');
+      setBillData({
+        bill_name: '',
+        bill_amount: 0,
+        bill_date: new Date().toISOString().split('T')[0],
+        status: 'pending',
+        biller_name: localStorage.getItem('user_name'),
+      });
       // navigate('/users');
     } else {
       setMsg('Error creating Bill. Please try again.');

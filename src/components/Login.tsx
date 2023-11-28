@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Typography, TextField, Button, Container, Box, Paper } from '@mui/material';
@@ -8,6 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
 
   const submit = async (e: any) => {
     e.preventDefault();
@@ -31,21 +32,17 @@ const Login = () => {
       Cookies.set('email', email);
       Cookies.set("id", "1");
       storeTokenLocally(data.access, user_type, user_name);
-      if (user_type === 'C') {
-        navigate('/bills');
+      if (user_type === 'C' || user_type === 'B') {
+        window.location.href = '/bills';
+      } else if (user_type === 'A') {
+        window.location.href = '/users';
+      } else {
+        window.location.href = '/bills';
       }
-      else if (user_type === 'B') {
-        navigate('/bills');
-      }
-      else if (user_type === 'A') {
-        navigate('/users');
-      }
-      else
-      navigate('/bills');
     } catch (error: any) {
       console.error('Error in token fetch:', error.message);
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">

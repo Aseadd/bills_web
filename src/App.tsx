@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes, Outlet, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './app/store';
@@ -16,18 +16,27 @@ import Report from './components/Report';
 import Cookies from 'js-cookie';
 
 const isAuthenticated = () => {
-  return !!Cookies.get('access_token');
+  return Cookies.get('access_token')? true : false;
 };
 
 const isAuthorized = () => {
   return localStorage.getItem('user');
 };
 
+
+
 const App: React.FC = () => {
+
+  // refresh the window on logout only once
+   
+  
+
   return (
     <Provider store={store}>
       <BrowserRouter>
+      
         <Routes>
+          <Route path="signup" element={<Signup />} />
           <Route
             path="/"
             element={
@@ -42,7 +51,6 @@ const App: React.FC = () => {
             }
           >
             <Route path="login" element={<LoginPage />} />
-            <Route path="signup" element={<Signup />} />
             <Route path="bills" element={<Bills />} />
             <Route path="logout" element={<Logout />} />
             <Route path="create-bill" element={<CreateBill />} />
