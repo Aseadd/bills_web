@@ -71,6 +71,17 @@ To get a local copy up and running follow these simple steps.
 - [Unavailable for now]
 - Until that enjoy the screen shoots
 
+![Screenshot from 2023-11-28 11-30-18](https://github.com/Aseadd/bills_web/assets/48018471/56e0fd50-8504-46cf-b61f-e648ace76915)
+![Screenshot from 2023-11-28 11-29-35](https://github.com/Aseadd/bills_web/assets/48018471/ddad8089-6d78-4dfa-8164-e91fe15d1277)
+![Screenshot from 2023-11-28 11-30-11](https://github.com/Aseadd/bills_web/assets/48018471/770aaec3-b163-42e3-8d59-8cb69d5c8c03)
+![Screenshot from 2023-11-28 11-29-30](https://github.com/Aseadd/bills_web/assets/48018471/f5d0f460-a1c5-4a19-9af1-8eb8e916cdde)
+![Screenshot from 2023-11-28 11-29-12](https://github.com/Aseadd/bills_web/assets/48018471/9ac6f7a2-d60b-49be-93a8-8af2d5073320)
+![Screenshot from 2023-11-28 11-28-45](https://github.com/Aseadd/bills_web/assets/48018471/5c2cae8e-b153-4635-9109-c0f6ca370b5b)
+![Screenshot from 2023-11-28 11-28-08](https://github.com/Aseadd/bills_web/assets/48018471/cec3f55e-62ac-406d-859b-05fd1df42fc6)
+![Screenshot from 2023-11-28 11-28-23](https://github.com/Aseadd/bills_web/assets/48018471/dcffb9ef-0129-4e37-b358-baf6e6a26ec5)
+![Screenshot from 2023-11-28 11-28-00](https://github.com/Aseadd/bills_web/assets/48018471/534af3d3-53bc-4e32-897e-b26119ecb2c2)
+![Screenshot from 2023-11-28 12-09-38](https://github.com/Aseadd/bills_web/assets/48018471/f6f9bb8a-06dd-42d1-bf7b-5a7b86407d9c)
+
 
 
 ## Authors
