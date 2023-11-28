@@ -54,6 +54,7 @@ const Payments: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Bill | null>(null);
   const [paidBills, setPaidProducts] = useState<Bill[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [paidOnce, setPaidOnce] = useState<Bill[]>([]);
   const [msg, setMsg] = useState('');
   const [success, setSuccess] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState(0);
@@ -70,6 +71,34 @@ const Payments: React.FC = () => {
   };
 
   const navigate = useNavigate();
+  console.log('paidBills', paidBills);
+
+  useEffect(() => {
+    const fetchBills = async () => {
+      try {
+        const token = retrieveTokenLocally();
+
+        const response = await axios.get('http://localhost:8000/bills', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setBills(response.data);
+      } catch (error) {
+        console.error('Error fetching bills:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBills();
+  
+    console.log("Bills", bills);
+    console.log('paidOnce', paidOnce);
+
+  }
+  , []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -187,6 +216,7 @@ const Payments: React.FC = () => {
                       </Button>
                     )}
                     {bill.status === 'paid' && (
+                      
                       <Button variant="contained" color="primary" disabled>
                         Paid
                       </Button>
@@ -223,12 +253,25 @@ const Payments: React.FC = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          {paidBills && (
             <div>
               <Typography variant="h6">Paid Bills</Typography>
               <List>
-
-                {paidBills && paidBills.map((bill) => (
+              {
+                paidBills && paidBills.map((bill) => (
+                  <ListItem key={bill.id}>
+                    <ListItemText
+                      primary={<strong>{bill.bill_name}</strong>}
+                      secondary={`${bill.bill_date} - Birr-${bill.bill_amount}  - ${bill.biller_name}`}
+                    />
+                  </ListItem>
+                  ))
+                  }
+               </List>
+              <List>
+              {
+              bills.filter((bill) => (
+                bill.status === 'paid'
+              )).map((bill) => (
                   <ListItem key={bill.id}>
                     <ListItemText
                       primary={<strong>{bill.bill_name}</strong>}
@@ -236,23 +279,25 @@ const Payments: React.FC = () => {
                     />
                   </ListItem>
                 ))
-                }
+              }
               </List>
-              </div>
-            )}
-                {
-                   paidBills.length === 0 && (
-                    <ListItem>
-                      <ListItemText
-                        primary={<strong>No paid bills yet.</strong>}
-                      />
-                    </ListItem>
-                  )
-                }
+
+              <List>
+              
+              {
+              bills.filter((bill) => bill.status === 'paid').length === 0 &&(
+                <ListItem>
+                  <ListItemText
+                    primary={<strong>No paid bills yet.</strong>}
+                  />
+                </ListItem>
+              )
+            }
+            </List>
             </div>
-    )}
-    
     <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
+      </div>
+    )}
   </Paper>
   );
 };
