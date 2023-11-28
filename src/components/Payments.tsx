@@ -13,39 +13,46 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-interface Product {
+interface Bill {
   id: number;
-  name: string;
-  description: string;
-  price: number;
+  bill_name: string;
+  bill_amount: number;
+  bill_date: string;
+  status: string;
+  biller_name: string;
 }
-
 interface Payment {
   id: number;
   amount: number;
-  product: Product;
+  bill: Bill;
   price: number;
 }
 
 interface PaymentResponse {
   id: number;
   amount: number;
-  product: number;
+  bill: number;
   price: number;
 }
 
 
 const Payments: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [bills, setBills] = useState<Bill[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [paidProducts, setPaidProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Bill | null>(null);
+  const [paidBills, setPaidProducts] = useState<Bill[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [msg, setMsg] = useState('');
   const [success, setSuccess] = useState(false);
@@ -69,15 +76,15 @@ const Payments: React.FC = () => {
       try {
         const token = retrieveTokenLocally();
 
-        const response = await axios.get('http://localhost:8000/products', {
+        const response = await axios.get('http://localhost:8000/bills', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setProducts(response.data);
+        setBills(response.data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching bills:', error);
       } finally {
         setLoading(false);
       }
@@ -86,9 +93,9 @@ const Payments: React.FC = () => {
     fetchProducts();
   }, []);
 
-  const handlePayment = (product: Product) => {
-    setSelectedProduct(product);
-    setPaidProducts((prevProducts) => [...prevProducts, product]);
+  const handlePayment = (bill: Bill) => {
+    setSelectedProduct(bill);
+    setPaidProducts((prevProducts) => [...prevProducts, bill]);
     setOpenDialog(true);
   };
 
@@ -106,7 +113,7 @@ const Payments: React.FC = () => {
         'http://localhost:8000/api/create-payment/',
         {
           amount: paymentAmount,
-          product: selectedProduct?.id,
+          bill: selectedProduct?.id,
         },
         {
           headers: {
@@ -118,7 +125,8 @@ const Payments: React.FC = () => {
       console.log('response', response);
       if (response.status === 200) {
         setPaidProducts((prevProducts) => [...prevProducts, response.data]);
-        console.log('paidProducts', selectedProduct);
+
+        console.log('paidBills', selectedProduct);
         setMsg('Payment successful!');
         setSuccess(true);
         showToast('success', 'Payment successful!');
@@ -141,27 +149,64 @@ const Payments: React.FC = () => {
 
   return (
     <Paper elevation={3} style={{ padding: 16, margin: 16 }}>
-      <Typography variant="h4" gutterBottom style={{ color: '#1b5e20' }}>
-        Your Payments
-      </Typography>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <div>
-          <List>
-            {products.map((product) => (
-              <ListItem key={product.id}>
-                <ListItemText
-                  primary={<strong>{product.name}</strong>}
-                  secondary={`${product.description} - Birr-${product.price}`}
-                />
-                <Button variant="contained" color="primary" onClick={() => handlePayment(product)}>
-                  Pay
-                </Button>
-              </ListItem>
-            ))}
-          </List>
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
+    <Typography variant="h4" gutterBottom style={{ color: '#1b5e20' }}>
+      Your Payments
+    </Typography>
+    {loading ? (
+      <CircularProgress />
+    ) : (
+      <div>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Bill Name</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Biller Name</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {bills.map((bill) => (
+                <TableRow key={bill.id}>
+                  <TableCell>{bill.bill_name}</TableCell>
+                  <TableCell>Birr-{bill.bill_amount}</TableCell>
+                  <TableCell>{bill.bill_date}</TableCell>
+                  <TableCell>{bill.status}</TableCell>
+                  <TableCell>{bill.biller_name}</TableCell>
+                  <TableCell>
+                    {bill.status === 'pending' && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handlePayment(bill)}
+                      >
+                        Pay
+                      </Button>
+                    )}
+                    {bill.status === 'paid' && (
+                      <Button variant="contained" color="primary" disabled>
+                        Paid
+                      </Button>
+                    )}
+                    {bill.status === 'overdue' && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handlePayment(bill)}
+                      >
+                        Pay
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
             <DialogTitle>Confirm Payment</DialogTitle>
             <DialogContent>
               <TextField
@@ -178,36 +223,37 @@ const Payments: React.FC = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          {paidProducts && (
+          {paidBills && (
             <div>
-              <Typography variant="h6">Paid Prodcuts</Typography>
+              <Typography variant="h6">Paid Bills</Typography>
               <List>
 
-                {paidProducts && paidProducts.map((product) => (
-                  <ListItem key={product.id}>
+                {paidBills && paidBills.map((bill) => (
+                  <ListItem key={bill.id}>
                     <ListItemText
-                      primary={<strong>{product.name}</strong>}
-                      secondary={`${product.description} - Birr-${product.price}`}
+                      primary={<strong>{bill.bill_name}</strong>}
+                      secondary={`${bill.bill_date} - Birr-${bill.bill_amount}  - ${bill.biller_name}`}
                     />
                   </ListItem>
                 ))
                 }
+              </List>
+              </div>
+            )}
                 {
-                   paidProducts.length === 0 && (
+                   paidBills.length === 0 && (
                     <ListItem>
                       <ListItemText
-                        primary={<strong>No paid products yet.</strong>}
+                        primary={<strong>No paid bills yet.</strong>}
                       />
                     </ListItem>
                   )
                 }
-              </List>
             </div>
-          )}
-        </div>
-      )}
-      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
-    </Paper>
+    )}
+    
+    <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
+  </Paper>
   );
 };
 
