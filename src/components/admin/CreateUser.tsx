@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { Button, Paper, TextField, Typography, Grid, FormControl, InputLabel, Select, FormControlLabel, Radio, RadioGroup, FormHelperText } from '@mui/material';
+import { Button, Paper, TextField, Typography, Grid,Container, FormControl, InputLabel, Select, FormControlLabel, Radio, RadioGroup, FormHelperText } from '@mui/material';
 import axios from 'axios';
 import { Label } from '@mui/icons-material';
 
@@ -97,7 +97,7 @@ const CreateUser = () => {
             password: '',
             user_type: '',
           });
-          
+
         // navigate('/users');
       } 
       else if (response.status === 400) {
@@ -119,6 +119,7 @@ const CreateUser = () => {
     }
   };
   return (
+    <Container component="main" maxWidth="md">
     <Paper elevation={3} style={{ padding: 16, margin: 16 }}>
       <Typography variant="h4" gutterBottom>
         Register User
@@ -187,6 +188,7 @@ const CreateUser = () => {
     
       </form>
     </Paper>
+    </Container>
   );
 };
 
