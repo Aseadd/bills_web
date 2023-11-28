@@ -1,6 +1,6 @@
 ![HTML](https://img.shields.io/badge/-HTML-orange) ![CSS](https://img.shields.io/badge/-CSS-blue) ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow) ![React](https://img.shields.io/badge/-react-green) [Typescript](https://img.shields.io/badge/-typescript-blue) [Redux Toolkit](https://img.shields.io/badge/-redux-green)
 
-# Course Management System:
+# Bill Management System:
 
 - This Web Application is the frontend part of single page application developed with React JS library that manages Bills for different user roles
 
@@ -70,10 +70,7 @@ To get a local copy up and running follow these simple steps.
 
 - [Unavailable for now]
 - Until that enjoy the screen shoots
-  ![Screenshot from 2023-11-12 23-31-00](https://github.com/Aseadd/student-web/assets/48018471/6b401071-4485-4aad-b527-e6c96e43ed02)
-![Screenshot from 2023-11-12 23-31-18](https://github.com/Aseadd/student-web/assets/48018471/8bd9a848-cab6-4b00-9b31-c41a0be9016a)
-![Screenshot from 2023-11-12 23-31-28](https://github.com/Aseadd/student-web/assets/48018471/a3266914-4e6b-42be-9dbe-4e590b7fa123)
-![Screenshot from 2023-11-12 23-31-55](https://github.com/Aseadd/student-web/assets/48018471/e0d7a164-3917-4599-b60d-7350f260798d)
+
 
 
 ## Authors
